@@ -75,3 +75,7 @@ async def get_weather(
         data["city"] = city_name
 
         return data
+
+@app.get("/api/cities")
+async def get_cities():
+    return {city.name: city.value for city in CityName}
