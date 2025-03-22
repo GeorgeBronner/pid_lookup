@@ -1,24 +1,23 @@
-import './style.css'
-import javascriptLogo from './javascript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.js'
+import axios from 'axios';
 
-document.querySelector('#app').innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-      <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
-    </a>
-    <h1>Hello Vite!</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite logo to learn more
-    </p>
-  </div>
-`
+document.getElementById('getCities').addEventListener('click', async () => {
+  try {
+    const response = await axios.get('http://localhost:8000/api/cities');
+    const cities = response.data;
+    console.log(response);
+    const citiesDiv = document.getElementById('cities');
+    citiesDiv.innerHTML = '';
+    for (const [key, value] of Object.entries(cities)) {
+      const cityElement = document.createElement('div');
+      cityElement.textContent = `${key}: ${value}`;
+      citiesDiv.appendChild(cityElement);
+      console.log(`${key}: ${value}`);
+    }
+  } catch (error) {
+    console.error('Error fetching cities:', error);
+  }
+});
 
-setupCounter(document.querySelector('#counter'))
+document.getElementById('clear').addEventListener('click', () => {
+  document.getElementById('cities').innerHTML = '';
+});
